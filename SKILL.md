@@ -431,14 +431,15 @@ output/
 
 ---
 
-## Craft 通用工艺（13 个维度，按需加载）
+## Craft 通用工艺（14 个维度，按需加载）
 
 生成代码时根据页面类型加载所需的 craft 文件：
 
 | Craft 文件 | 内容 | 何时加载 |
 |------------|------|----------|
 | `references/craft/typography.md` | 字体配对/层级/中英文规则/65ch 行宽 | 所有页面 |
-| `references/craft/color.md` | 60-30-10/色彩心理学/WCAG/暗色模式 | 所有页面 |
+| `references/craft/color.md` | 60-30-10/色彩心理学/WCAG/暗色模式 + **调色板路由入口** | 所有页面 |
+| `references/craft/color-palettes.md` | **20 个经过验证的调色板**（含 hex）+ 项目类型×风格路由表 | 确定配色时（**必加载**） |
 | `references/craft/spacing.md` | 4的倍数网格/嵌套递进/组件间距 | 所有页面 |
 | `references/craft/anti-ai-slop.md` | P0/P1/P2 分级反 AI 视觉臭味 + Before/After | 所有页面 |
 | `references/craft/components.md` | 统一尺寸表/按钮/输入框/卡片/导航 | 有组件的页面 |

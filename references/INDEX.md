@@ -32,6 +32,7 @@
 |-----------|-----------|
 | 排版规范（字号/行高/字体） | `references/craft/typography.md` |
 | 配色方案（60-30-10/对比度/暗色模式）| `references/craft/color.md` |
+| **调色板选择（20个验证方案 + 路由表）** | **`references/craft/color-palettes.md`（必加载）** |
 | 间距系统（4px基准/嵌套递进） | `references/craft/spacing.md` |
 | 组件规范（按钮/卡片/输入框/导航） | `references/craft/components.md` |
 | 响应式策略（Mobile-first/断点/Container Queries）| `references/craft/responsive-strategy.md` |

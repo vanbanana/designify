@@ -2,6 +2,31 @@
 
 > 通用色彩系统规则，适用于任何品牌和风格。
 
+## ⛔ 铁律：不要自己编配色
+
+**从 `color-palettes.md` 选一个经过验证的调色板。直接复制 hex 值到你的 :root。**
+
+### 快速路由
+
+| 你在做什么 | 直接用 |
+|-----------|--------|
+| 后台/仪表盘（暗色） | **D-01 Midnight Analytics** |
+| 后台/仪表盘（亮色） | **L-01 Clean Slate** |
+| 开发者工具（暗色） | **D-02 Obsidian Professional** |
+| 项目管理（暗色） | **D-03 Deep Lavender** |
+| 金融系统 | **L-08 Trust Medical** / **D-04 Charcoal Finance** |
+| 电商-通用 | **L-01 Clean Slate** |
+| 电商-时尚 | **L-07 Pure Fashion** |
+| 电商-食品 | **L-06 Fresh Market**（⚠️ 禁用蓝色） |
+| 社交/社区 | **L-11 Playful Social** |
+| 教育平台 | **L-09 Edu Blue** |
+| 医疗健康 | **L-08 Trust Medical** |
+| 政务系统 | **L-10 Gov Neutral** |
+| 高端奢华 | **L-13 Luxury Dark Gold** |
+| 儿童产品 | **L-14 Kids & Fun** |
+
+**完整路由表和所有调色板的 hex 值 → `color-palettes.md`**
+
 ## 调色板结构（最小 8 色，最大 15 色）
 
 ```
