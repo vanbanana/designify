@@ -145,6 +145,20 @@
     → 只在浅色模式下测试过 = 暗色模式可能有对比度问题。
 13. "文字超长时会发生什么？"
     → 标题/描述超长必须用 line-clamp 或 text-overflow: ellipsis，不能撑破布局。
+14. "组件是不是用了 flex 居中？"
+    → 经常犯的错：父容器没设 `display: flex; align-items: center; justify-content: center`，`margin: 0 auto` 只对 block 元素生效。
+15. "左右两栏的内容在外边距上对称吗？"
+    → 常见错误：左侧 `ml-4`、右侧 `mr-6`，左宽右窄看着不对称。双栏布局的 padding/margin 必须镜像对称。
+16. "内边距是不是只设了一侧？"
+    → `padding-left: 16px` 没有 `padding-right: 16px` = 一边贴边一边有间距，视觉重心偏移。任何 padding/margin 必须成对出现，除非有明确理由（如贴边导航）。
+17. "容器宽度有没有写死？"
+    → `width: 400px` 在 375px 手机上溢出。必须用 `max-width: 100%` 或 `width: 100%` + `max-width: 400px`。
+18. "外层容器有没有加 overflow: hidden？"
+    → 有些卡片内的文字溢出是因为外层容器没加 overflow，导致内容撑出边界了。
+19. "text-align 有没有被忽略？"
+    → flex 容器内的文字不会自动居中，要加 `text-align: center`。grid 容器同理。
+20. "水平间距（gap / space-x）在换行后还正常吗？"
+    → 一行的 gap 正常，但换行后右侧多出来一个 gap → 用 grid 而不是 flex gap 处理。
 
 **Step 6.5 —— 组件文档生成（状态预览）：**
 - 为核心组件写入 `docs/components/<name>.md`
