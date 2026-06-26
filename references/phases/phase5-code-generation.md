@@ -110,6 +110,12 @@
 - 每个文件包含 default / loading / empty / error / edge 状态代码块
 - 格式见 `references/craft/component-documentation.md`
 
+**Step 6.6 —— 🧪 组件画廊渲染（实验性功能 — 询问用户）：**
+- 询问："是否需要将所有组件状态渲染为一个 HTML 画廊，方便快速浏览？"
+- 用户选择"是" → 运行 `node scripts/render-component-gallery.mjs <dir> --open`
+- 生成 `output/component-gallery.html`，浏览器自动打开
+- 用户选择"否" → 跳过
+
 **Step 7.6 —— API 契约推导（生成结束后执行）：**
 - 扫描代码中所有 fetch / axios / $.ajax 调用
 - 提取：method, path, 请求字段, 响应处理, 错误处理
