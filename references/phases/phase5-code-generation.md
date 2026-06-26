@@ -159,6 +159,16 @@
     → flex 容器内的文字不会自动居中，要加 `text-align: center`。grid 容器同理。
 20. "水平间距（gap / space-x）在换行后还正常吗？"
     → 一行的 gap 正常，但换行后右侧多出来一个 gap → 用 grid 而不是 flex gap 处理。
+21. "字体 fallback 写了吗？网络字体挂了怎么办？"
+    → font-family: 'Inter', system-ui, sans-serif。只写 'Inter' 不写 fallback = 加载失败时用户看不见任何字。
+22. "form 的 submit 行为处理了吗？"
+    → 表单长得漂亮但点了没反应 = 前端最坑的错误。必须有 onSubmit / form action 或至少 console.log 占位。
+23. "图片有 width 和 height 吗？loading 设了没？"
+    → 缺 width/height 导致 CLS（布局偏移），缺 loading="lazy" 导致首屏加载多张图片。
+24. "z-index 有没有随手写 999？"
+    → z-10 / z-50 / z-999 和第三方组件（Modal、Toast）冲突。z-index 必须统一管理，从 1 开始逐层递增。没有 z-index 体系 = 早晚被覆盖。
+25. "装饰性图片的 alt 写对了吗？"
+    → 装饰性图片（背景、分割线、icon）必须 alt=""（空），不要写 alt="装饰图" alt="image"。屏幕阅读器会读出来。
 
 **Step 6.5 —— 组件文档生成（状态预览）：**
 - 为核心组件写入 `docs/components/<name>.md`
