@@ -4,8 +4,14 @@ description: |
   Use when building any frontend interface — websites, apps, dashboards, landing pages,
   components, or UI systems. Triggers: 做网站、做App、做界面、UI设计、前端开发、
   landing page、dashboard、组件、页面布局、响应式、做个XX平台、帮我设计、
-  build website、create UI、make app、design page、frontend code、生成界面、写前端。
+  build website、create UI、make app、design page、frontend code、生成界面、写前端、
+  优化、分析、审计、修改、重构、重做、改得好看、美化、redesign、refactor、audit。
   Also use when user provides a reference URL to replicate, or asks to improve existing UI.
+  Also use when user provides an existing project or codebase to analyze/optimize.
+  
+  路由规则：
+  用户有现有项目/代码 → Phase 0（项目审计）
+  用户从零开始 → Phase 1（需求发现）
 version: "3.0.0"
 ---
 
@@ -113,7 +119,16 @@ node scripts/quality-check.mjs <target-dir> --output output/quality-report.md --
 
 ---
 
-## 核心工作流（7 阶段，必须按顺序执行）
+## 路由决策（进入时立即判断）
+
+```
+用户说了什么？ ─┬── "帮我看/优化/分析/改这个项目" → Phase 0: 项目审计
+                ├── "帮我做个XX/设计/生成" → Phase 1: 需求发现
+                ├── 提供了 URL/截图 → Phase 1 + 运行 website-analyzer
+                └── 其他 → Phase 1: 需求发现
+```
+
+## 核心工作流（必须按顺序执行）
 
 **宣告规则：** 进入每个阶段时，宣告阶段和指令文件。例如：
 > "Phase 1：需求发现。加载 phase1-discovery.md。"
@@ -140,7 +155,16 @@ Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Ph
 ├── YYYY-MM-DD-design-read.md         ← Phase 3 MUST 生成（铁律 1）
 ├── YYYY-MM-DD-design-tokens.css      ← Phase 5 MUST 生成（设计令牌记录）
 ├── YYYY-MM-DD-quality-report.md      ← Phase 6 MUST 生成（铁律 2）
+├── YYYY-MM-DD-audit-report.md        ← Phase 0 MUST 生成（项目审计时）
 └── progress.md                       ← Phase 7 MUST 生成（进度持久化）
+
+📖 项目文档 → docs/
+├── README.md                         ← 文档总索引
+├── CHANGELOG.md                      ← 变更记录
+├── api-contract.md                   ← API 契约
+├── components/*.md                   ← 组件文档+状态预览
+├── mock-api.md                       ← Mock API（如需）
+└── architecture/                     ← 架构记录
 
 💻 代码产物 → 项目根目录（或用户指定目录）
 ├── index.html / app.jsx / style.css  ← Phase 5 按技术栈组织
