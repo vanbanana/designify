@@ -13,6 +13,7 @@
 | 了解提问协议和3轮提问流程 | `references/phases/phase1-discovery.md` |
 | 判断项目属于哪个类型 | `references/project-types/index.md` → 对应类别文件 |
 | 用户提供了参考网站 → 运行分析工具 | `tools/website-analyzer.mjs` |
+| Phase 6 质量门禁 → 运行自动扫描 | **`scripts/quality-check.mjs`** |
 
 ### 阶段 2：产品定义
 | 需要做什么 | 读哪个文件 |
@@ -38,6 +39,9 @@
 | 响应式策略（Mobile-first/断点/Container Queries）| `references/craft/responsive-strategy.md` |
 | 动效规范（缓动曲线/时长/性能）| `references/craft/animation-discipline.md` |
 | 图标/插画/图片资源 CDN | `references/craft/design-resources.md` |
+| **设计性格（Boldness/Motion/Density 三轴）** | **`references/craft/design-character.md`** |
+| **视觉节奏（间距变化/呼吸感）** | **`references/craft/visual-rhythm.md`** |
+| **艺术性代码参考（获奖站点源码/代码模式）** | **`references/craft/creative-code-references.md`**（Boldness ≥ 6 时必加载）|
 
 ### 阶段 5：质量门禁
 | 需要做什么 | 读哪个文件 |
@@ -48,6 +52,10 @@
 | 表单验证状态机 | `references/craft/form-validation.md` |
 | 五态覆盖检查 | `references/craft/state-coverage.md` |
 | Critique Theater 流程 | `references/phases/phase6-quality-gate.md` |
+| 自动化质量扫描 | `scripts/quality-check.mjs` |
+| **设计性格验证** | **`references/craft/design-character.md` → 铁律 + 红旗** |
+| **视觉节奏验证** | **`references/craft/visual-rhythm.md` → 反模式** |
+| **艺术性代码引用检查** | **`references/craft/creative-code-references.md` → 代码引用纪律** |
 
 ---
 
@@ -62,6 +70,11 @@
 | 用圆角还是直角？多大？ | `references/craft/components.md` |
 | 什么场景用什么布局？ | `references/phases/phase4-design-direction.md` |
 | 该用什么图标库？ | `references/craft/design-resources.md` |
+| 媒体/视频页面怎么设计？ | `references/craft/media-and-video-pages.md` |
+| 页面怎么才有"设计感"？ | **`references/craft/design-character.md`** |
+| 间距怎么不显得模板化？ | **`references/craft/visual-rhythm.md`** |
+| 颜色怎么用才能有力？ | **`references/craft/color.md` → 强调色配给制** |
+| 想要艺术性强的页面设计？ | **`references/craft/creative-code-references.md`** |
 
 ### 🧠 心理学与UX
 | 我想知道... | 去哪里找 |

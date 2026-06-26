@@ -17,6 +17,70 @@
 ✅ <img src="decorative.svg" alt="">（装饰图片用空 alt）
 ```
 
+### 可点击的 div/span 禁令（P0 — 出现即返工）
+
+**所有可交互元素必须使用语义化标签或正确的 ARIA 角色。**
+
+```html
+❌ <div onClick={handleClick}>提交</div>
+❌ <span onClick={handleClose}>关闭</span>
+
+✅ <button onClick={handleClick}>提交</button>
+
+✅ <!-- 如必须用 div，补全 ARIA + 键盘 -->
+   <div
+     onClick={handleClick}
+     role="button"
+     tabIndex={0}
+     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
+   >
+     提交
+   </div>
+```
+
+**规则：**
+- `<div onClick>` / `<span onClick>` = 自动不合格（质量检查脚本标记为违规）
+- 必须添加 `role="button"` + `tabIndex={0}` + `onKeyDown` 处理 Enter/Space
+- 更推荐直接使用 `<button>`（自带键盘事件 + 焦点管理 + 表单行为）
+
+### Modal/Drawer 强制性要求（P0 — 出现即返工）
+
+```html
+✅ <!-- Modal 模板 -->
+<div
+  class="dialog-backdrop"
+  onClick={closeModal}
+  aria-hidden={!isOpen}
+>
+  <div
+    class="dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dialog-title"
+    onClick={(e) => e.stopPropagation()}
+    onKeyDown={(e) => { if (e.key === 'Escape') closeModal(); }}
+  >
+    <h2 id="dialog-title">对话框标题</h2>
+    <!-- 内容 -->
+    <button onClick={closeModal} aria-label="关闭">×</button>
+  </div>
+</div>
+```
+
+**必须全部满足：**
+- `role="dialog"` 属性必须存在
+- `aria-modal="true"` 属性必须存在
+- `aria-labelledby` 指向标题元素
+- **遮罩点击关闭**：外层 backdrop 绑定 `onClick={close}`
+- **Esc 关闭**：对话框容器绑定 `onKeyDown` 监听 Escape 键
+- **焦点陷阱**：Modal 打开时焦点限制在内部（首次聚焦关闭按钮或第一个输入框），Tab 循环不逃逸
+- 关闭按钮必须有 `aria-label="关闭"`
+
+```html
+❌ <div className="modal"><!-- 缺少 role / aria-modal / 遮罩 / Esc -->
+✅ <!-- 以上模板为完整实现 -->
+```
+
 ### 标题层级
 ```
 每页只有 1 个 <h1>

@@ -2,29 +2,74 @@
 
 ---
 
-## 生成顺序
+## ⛔ HARD GATE: 技术栈确认
+
+**在开始 Step 1 之前，必须确认技术栈已在 Phase 1 确定。** 如果未确定 → **立即停止，返回 Phase 1 补问 Q4。**
+
+技术栈由 Phase 1 锁定，此处仅为路由表（不可跳过）：
+
+```
+框架（Phase 1 已确定，此处为目录结构路由）：
+├── React + Next.js → src/pages/ + App Router 布局
+├── React + Vite → src/ + .jsx 组件文件
+├── Vue + Nuxt → pages/ + .vue 单文件组件
+├── 单文件 HTML → 根目录 index.html + assets/
+├── Tailwind CSS → tailwind.config.* + postcss 配置
+└── 其他 → 按对应框架的标准目录结构
+
+样式方案（Phase 1 已确定）：
+├── Tailwind CSS → 原子化类名，postcss 构建
+├── CSS Modules → *.module.css 文件
+├── styled-components → CSS-in-JS
+└── 内联 CSS → 单文件 HTML 的 <style> 标签
+
+代码产物 → 项目根目录（非 output/）
+├── 单文件 HTML：根目录
+├── React/Vue：src/ 目录
+└── 资源文件：assets/ 或 public/
+```
+
+<HARD-GATE>
+**铁律 7 执行点：没有技术栈声明就不能写一行代码。**
+如果 Phase 2 的产品定义文档中没有"技术栈声明"字段 → 停止，返回 Phase 2 补填。
+</HARD-GATE>
+
+---
+
+## 生成顺序（7 步）
+
+```
 
 ```
 1. 先搭骨架：语义化页面结构（header/main/nav/section/article/footer）
 2. 设计令牌：CSS 变量定义 → 写入 output/design-tokens.css（颜色/间距/字号/圆角/阴影）
 3. 引入素材：图标库 CDN/npm + 占位图 + 插画（根据项目类型路由表选择）
+   ├── 3a. 图标库预检（见下方"图标可用性预检"）
+   ├── 3b. 引入选定的图标库
+   └── 3c. 配置占位图 + 插画资源
 4. 再填内容：真实文案（不用 lorem ipsum，用符合业务的中文内容）
 5. 然后做交互：按钮状态、表单验证状态机、导航切换
 6. 加状态覆盖：空状态（用 unDraw 插画）/加载骨架屏/错误状态/边界处理
 7. 最后加细节：动效（遵守缓动曲线和时长阈值）、微交互
 ```
 
----
+### 生成过程中必须执行的设计感检查
 
-## 框架选择树
+**Step 4.5 —— 强调色配给检查（在素材引入后、填写内容前）：**
+- 清单上每个使用品牌色的元素，问：**"这个颜色必要吗？"**
+- 主色每屏出现次数 ≤ 3 次（详见 `references/craft/color.md` → 强调色配给制）
+- 如果超过 3 次，删除多余的品牌色使用，替换为中性色
 
-```
-框架选择：
-├── 用户指定框架 → 用指定的
-├── 用户是小白 → React + Tailwind（最容易上手）
-├── 用户要快速原型 → 单文件 HTML + 内联 CSS/JS
-└── 用户要生产级 → Next.js/App Router + CSS Modules
-```
+**Step 5.5 —— 视觉节奏检查（在填写内容后、做交互前）：**
+- Section 间距是否全部相同？如果是，**这是模板。** 修改为至少 2 种不同值
+- 检查节奏模式：密集 → 开放 → 中等（详见 `references/craft/visual-rhythm.md`）
+- 标题下方间距 < 标题上方间距
+
+**Step 7.5 —— "令人难忘的品质"验证（动效完成后）：**
+- 问自己：**"关掉这个页面后，用户能记住的一个东西是什么？"**
+- 如果不能回答 → 添加一个"一个大胆之举"（一个突出的视觉元素、一个意外布局、一个独特动效）
+- 这个品质必须与 Phase 3 Design Read 中声明的设计性格（Boldness / Motion / Density）一致
+- 记录在质量报告中
 
 ---
 
@@ -40,9 +85,66 @@
 
 ---
 
-## 动效规则
+## 图标可用性预检（Step 3 子步骤 — 必须执行）
 
-详见 `references/craft/animation-discipline.md`。
+> 使用未知图标名称会导致构建失败或页面无图标。每次选择图标库后必须执行此预检。
+
+### 预检流程
+
+```
+1. 确定使用的图标库（Lucide / Heroicons / Phosphor / Tabler）
+2. 列出所有要使用的图标名称
+3. 验证每个图标名称在所选库中真实存在
+4. 确认无误后再引入代码
+```
+
+### 各图标库验证方式
+
+| 图标库 | 验证方式 |
+|--------|----------|
+| **Lucide** | 官方图标列表: https://lucide.dev/icons/ — 或查询 `lucide-react` 包的导出列表 |
+| **Heroicons** | 官方图标列表: https://heroicons.com/ — 或查询 `@heroicons/react` 导出 |
+| **Phosphor** | 官方图标列表: https://phosphoricons.com/ — 或查询 `@phosphor-icons/react` 导出 |
+| **Tabler** | 官方图标列表: https://tabler.io/icons — 注意前缀 `ti ti-` |
+
+### 常见不存在的图标名称（会导致构建失败）
+
+```
+❌ Mask             → Lucide 中不存在
+❌ ArrowUp          → Heroicons 中为 ArrowUpIcon 或 ArrowUp 带后缀
+❌ Loading          → 用 Loader / Loader2
+❌ Setting          → 用 Settings（复数）
+❌ SearchIcon       → Search 就够了，加 Icon 后缀在某些库中不存在
+```
+
+### 规则
+
+- **禁止使用未经验证的图标名称** — 不要凭记忆猜测名称
+- **一个项目只用一个图标库** — 不混用
+- 使用前先验证，防止 Phase 5 生成的代码在运行时丢失图标
+
+---
+
+## Website Analyzer 输出验证（有参考 URL 时执行）
+
+在 Phase 1 运行 `website-analyzer.mjs` 后，验证分析结果的有效性：
+
+### 验证条件
+
+| 条件 | 判定 | 操作 |
+|------|------|------|
+| CSS 规则提取 < 5KB | ❌ 分析失效 | Fallback 到品牌 DESIGN.md + 平台哲学 |
+| 设计令牌 Section 为空（无颜色/间距/排版数据） | ❌ 分析失效 | Fallback 到品牌 DESIGN.md + 平台哲学 |
+| 正常提取（CSS > 5KB 且有设计令牌） | ✅ 有效可用 | 在 Phase 4 Design Direction 中使用分析结果 |
+
+### Fallback 流程
+
+```
+分析结果失效 → 读取 references/craft/platform-philosophy.md 确定平台基线
+             → 根据 Phase 1 风格映射查找对应的品牌 DESIGN.md
+             → 使用品牌 DESIGN.md 的设计令牌替代 analyzer 的 CSS 变量
+             → 在 Design Read 中注明 "website-analyzer 失效，使用 [品牌] 设计系统替代"
+```
 
 ```
 缓动曲线：进入用减速(0,0,0.2,1) / 离开用加速(0.4,0,1,1) / 标准(0.4,0,0.2,1)

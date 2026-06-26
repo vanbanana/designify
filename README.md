@@ -6,7 +6,7 @@
 
 **Stop AI slop. Start pixel-perfect, psychology-driven frontend design.**
 
-[![Skills](https://img.shields.io/badge/Skills-13%20Craft%20Files-blue?style=flat-square)]()
+[![Skills](https://img.shields.io/badge/Skills-17%20Craft%20Files-blue?style=flat-square)]()
 [![Brands](https://img.shields.io/badge/Brands-74%20Real%20Design%20Systems-purple?style=flat-square)]()
 [![Project Types](https://img.shields.io/badge/Project%20Types-135%20Patterns-green?style=flat-square)]()
 [![UX Laws](https://img.shields.io/badge/UX%20Laws-15%20Cognitive%20Principles-orange?style=flat-square)]()
@@ -165,6 +165,8 @@ node tools/website-analyzer.mjs https://stripe.com --output analysis.md --verbos
 designify/
 ├── SKILL.md                          # 479 lines — routing + iron laws
 ├── README.md                         # This file
+├── scripts/
+│   └── quality-check.mjs             # Zero-dep CSS/JSX quality scanner
 ├── tools/
 │   └── website-analyzer.mjs          # 1800+ lines — zero-dep analyzer
 ├── references/
@@ -173,22 +175,27 @@ designify/
 │   │   ├── phase1-discovery.md       # Questioning protocol details
 │   │   ├── phase4-design-direction.md # Layout + style routing
 │   │   ├── phase5-code-generation.md # 7-step generation
-│   │   ├── phase6-quality-gate.md    # 10-dim gate + critique
+│   │   ├── phase6-quality-gate.md    # 10-dim gate + critique + quality script
 │   │   └── pitfalls-and-verification.md
-│   ├── craft/                        # 13 design rule files
-│   │   ├── typography.md             # Font pairing / CJK rules / 65ch
-│   │   ├── color.md                  # 60-30-10 / WCAG / dark mode
+│   ├── craft/                        # 16 design rule files
+│   │   ├── typography.md             # Font pairing / CJK rules / 65ch + 3-tier size system
+│   │   ├── color.md                  # 60-30-10 / WCAG / dark mode + accent rationing
+│   │   ├── color-palettes.md         # 20 validated palettes + routing table
 │   │   ├── spacing.md               # 4px grid / nesting / components
 │   │   ├── components.md            # Buttons / inputs / cards / sizes
 │   │   ├── anti-ai-slop.md          # P0/P1/P2 severity + before/after
 │   │   ├── laws-of-ux.md            # 15 cognitive laws + AARRR + Hook
 │   │   ├── state-coverage.md        # 5-state matrix
 │   │   ├── animation-discipline.md  # Easing / duration / performance
-│   │   ├── accessibility-baseline.md # WCAG 2.2 AA
+│   │   ├── accessibility-baseline.md # WCAG 2.2 AA + div onClick ban + Modal mandate
 │   │   ├── form-validation.md       # State machine + timing
 │   │   ├── design-resources.md      # Icons / illustrations / CDN
 │   │   ├── platform-philosophy.md   # C/B/G/IoT design philosophy
-│   │   └── responsive-strategy.md   # Mobile-first / Grid vs Flex
+│   │   ├── responsive-strategy.md   # Mobile-first / Grid vs Flex
+│   │   ├── media-and-video-pages.md # Video player / live / playlist / fullscreen
+│   │   ├── design-character.md (NEW)# Design Character — Boldness/Motion/Density axis
+│   │   ├── visual-rhythm.md (NEW)   # Visual rhythm — spaced breathing & asymmetry
+│   │   └── creative-code-references.md (NEW) # Artistic frontend code — Codrops/Awwwards repos
 │   ├── project-types/                # 12 category files + index
 │   │   ├── index.md                  # Routing table
 │   │   ├── 01-commercial.md          # E-commerce / marketplace / O2O
@@ -246,15 +253,16 @@ Inspired by [obra/superpowers](https://github.com/obra/superpowers) — the gold
 
 | Metric | Count |
 |--------|-------|
-| Craft rule files | **13** |
+| Craft rule files | **17** (original + design-character, visual-rhythm, media-and-video-pages, creative-code-references) |
 | Brand design systems | **74** (Stripe, Vercel, Linear, Notion, Apple, Ferrari...) |
 | Project type patterns | **135** across 12 categories |
 | AI product patterns | **10** (chat, image, video, workflow, code, agent...) |
 | Cognitive UX laws | **15** |
-| Quality gate dimensions | **10** |
+| Quality gate dimensions | **15** (10 original + accessibility, quality-script, design-character, visual-rhythm, memorable-quality) |
+| Design Character axes | **3** (Boldness, Motion, Density) |
 | Anti-slop severity levels | **3** (P0/P1/P2) |
 | Workflow phases | **7** |
-| Iron Laws | **6** |
+| Iron Laws | **6** (+ 3 sub-laws for design character) |
 | CSS rules extracted per site | **~8,000** |
 | Website analyzer dependencies | **0** (pure Node.js) |
 | SKILL.md tokens (must-read) | **~4,900** (under 5,000 limit) |
