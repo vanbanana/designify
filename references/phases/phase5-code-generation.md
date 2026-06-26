@@ -36,9 +36,7 @@
 
 ---
 
-## 生成顺序（7 步）
-
-```
+## 生成顺序（7 + 2 步）
 
 ```
 1. 先搭骨架：语义化页面结构（header/main/nav/section/article/footer）
@@ -49,8 +47,25 @@
    └── 3c. 配置占位图 + 插画资源
 4. 再填内容：真实文案（不用 lorem ipsum，用符合业务的中文内容）
 5. 然后做交互：按钮状态、表单验证状态机、导航切换
+   ⚠️ Step 5 强制子步骤（UI 组件完整性）：
+   ├── 5a. 自定义所有表单控件（select/checkbox/radio/switch/textarea）
+   ├── 5b. 自定义滚动条（::-webkit-scrollbar）
+   ├── 5c. 自定义 alert/toast（禁止 window.alert/confirm/prompt）
+   ├── 5d. 自定义 tooltip/pagination/spinner/progress/tag
+   └── 5e. 检查同一行元素高度对齐、flex居中
 6. 加状态覆盖：空状态（用 unDraw 插画）/加载骨架屏/错误状态/边界处理
 7. 最后加细节：动效（遵守缓动曲线和时长阈值）、微交互
+
+8. 🔍 **UI 组件完整性扫尾**（新增 Step — 生成结束后必须执行）：
+   ├── 打开页面检查所有交互组件是否被主题化
+   ├── 如果发现浏览器原生样式 → 立即替换（具体实现见 `references/craft/components.md`）
+   └── 记录到质量报告
+
+9. 🔍 **布局对齐校验**（新增 Step — 全屏截图检查）：
+   ├── 检查所有 flex/grid 容器是否正确居中（align-items + justify-content）
+   ├── 检查同行元素高度是否一致
+   ├── 检查列表项间距是否统一
+   └── 修复后进入 Phase 6
 ```
 
 ### 生成过程中必须执行的设计感检查

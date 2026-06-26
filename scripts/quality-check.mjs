@@ -236,7 +236,45 @@ function checkPlaceholderContent(content, filePath, lines) {
   return violations;
 }
 
-// 5. CSS 变量使用审计
+// 6. 原生浏览器 UI 组件检测（未主题化的 select/checkbox/alert/scrollbar）
+const NATIVE_UI_PATTERNS = [
+  // 检测 window.alert / confirm / prompt（浏览器原生弹窗）
+  { pattern: /window\.alert\s*\(/gi, label: 'window.alert', suggestion: '替换为自定义 Toast/Modal 组件' },
+  { pattern: /window\.confirm\s*\(/gi, label: 'window.confirm', suggestion: '替换为自定义 ConfirmDialog 组件' },
+  { pattern: /window\.prompt\s*\(/gi, label: 'window.prompt', suggestion: '替换为自定义 Modal 输入组件' },
+  // 检测未被自定义的 <select>（无 appearance 声明）
+  { pattern: /<select[^>]*>(?![^]*appearance)/gis, label: '原生 select', suggestion: '添加 appearance: none + 自定义箭头' },
+  // 检测原生 alert 函数调用
+  { pattern: /alert\s*\(['"`]/gi, label: 'alert() 弹窗', suggestion: '替换为自定义 Toast 组件' },
+  { pattern: /confirm\s*\(['"`]/gi, label: 'confirm() 弹窗', suggestion: '替换为自定义 ConfirmDialog 组件' },
+];
+
+function checkNativeUI(content, filePath, lines) {
+  const violations = [];
+  const linesArr = content.split('\n');
+
+  for (let i = 0; i < linesArr.length; i++) {
+    const line = linesArr[i];
+    const lineNum = i + 1;
+    if (line.trim().startsWith('//') || line.trim().startsWith('/*') || line.trim().startsWith('*')) continue;
+
+    for (const { pattern, label, suggestion } of NATIVE_UI_PATTERNS) {
+      pattern.lastIndex = 0;
+      if (pattern.test(line)) {
+        violations.push({
+          file: relative(process.cwd(), filePath),
+          line: lineNum,
+          type: '原生 UI 组件',
+          value: label,
+          suggestion: suggestion,
+          context: line.trim()
+        });
+        break;
+      }
+    }
+  }
+  return violations;
+}
 const CSS_COLOR_VALUE_RE = /(?:#[0-9a-fA-F]{3,8}|rgba?\s*\([^)]+\)|hsla?\s*\([^)]+\))/g;
 const CSS_VAR_DEF_RE = /--[\w-]+\s*:/g;
 
@@ -310,6 +348,7 @@ for (const file of files) {
     ...checkFontSizes(content, file, lines),
     ...checkNonSemanticClickHandlers(content, file, lines),
     ...checkPlaceholderContent(content, file, lines),
+    ...checkNativeUI(content, file, lines),
   );
 
   // CSS 变量审计只对 CSS 文件执行
@@ -354,6 +393,7 @@ function generateReport() {
 | div/span onClick | ${(byType['div onClick']?.length || 0) + (byType['span onClick']?.length || 0)} | ${((byType['div onClick']?.length || 0) + (byType['span onClick']?.length || 0)) === 0 ? '✅ 通过' : '❌ 需修复'} |
 | 占位内容 | ${byType['占位内容']?.length || 0} | ${(byType['占位内容']?.length || 0) === 0 ? '✅ 通过' : '❌ ' + byType['占位内容'].length + ' 处违规'} |
 | CSS 变量审计 | ${byType['CSS 变量审计']?.length || 0} | ${(byType['CSS 变量审计']?.length || 0) === 0 ? '✅ 通过' : '❌ ' + byType['CSS 变量审计'].length + ' 处可优化'} |
+| 原生 UI 组件 | ${byType['原生 UI 组件']?.length || 0} | ${(byType['原生 UI 组件']?.length || 0) === 0 ? '✅ 通过' : '❌ ' + byType['原生 UI 组件'].length + ' 处违规'} |
 
 **总计：${totalViolations} 处问题** ${totalViolations === 0 ? '🎉 全部通过！' : '（需修复后重新扫描）'}
 
@@ -445,6 +485,21 @@ function generateReport() {
 `;
     for (const v of byType['CSS 变量审计']) {
       report += `| \`${v.file}\` | ${v.line} | \`${escapeMd(v.value)}\` | \`${escapeMd(v.context.slice(0, 50))}\` | ${escapeMd(v.suggestion)} |\n`;
+    }
+    report += '\n---\n\n';
+  }
+
+  // ─── 原生 UI 组件 ───
+  if (byType['原生 UI 组件']?.length > 0) {
+    report += `## 6. 原生 UI 组件（${byType['原生 UI 组件'].length} 处）
+
+> 浏览器原生提示窗（alert/confirm/prompt）和未自定义的表单控件必须替换为与主题一致的组件。
+
+| 文件 | 行号 | 类型 | 代码片段 | 建议 |
+|------|------|------|----------|------|
+`;
+    for (const v of byType['原生 UI 组件']) {
+      report += `| \`${v.file}\` | ${v.line} | ${v.value} | \`${escapeMd(v.context.slice(0, 50))}\` | ${escapeMd(v.suggestion)} |\n`;
     }
     report += '\n---\n\n';
   }

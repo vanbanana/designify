@@ -342,9 +342,11 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 2. 令牌：CSS 变量定义 → 写入 `output/design-tokens.css`
 3. 素材：图标库 CDN/npm + 占位图 + 插画（**图标预检**见 phase5-code-generation.md）
 4. 内容：真实文案（**禁止 lorem ipsum**）
-5. 交互：按钮状态、表单验证状态机、导航切换
+5. 交互 + **UI 组件完整化**：按钮状态、表单验证状态机、导航切换 + 自定义 select/checkbox/scrollbar/alert（详见 step5 子步骤）
 6. 状态：空状态/加载骨架屏/错误状态/边界处理
 7. 动效：缓动曲线 + 时长阈值 + prefers-reduced-motion
+8. **UI 完整性扫尾**：检查所有交互组件已主题化，无浏览器原生样式
+9. **布局对齐校验**：flex 居中、同行元素等高、列表间距统一
 
 **生成过程中必须的设计感检查（详见 phase5-code-generation.md）：**
 - Step 4.5：强调色配给检查 — 主色每屏 ≤ 3 次
@@ -382,6 +384,7 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 **新增维度：**
 | 质量脚本 | `scripts/quality-check.mjs` 零违规 | 0 违规 |
 | 可访问性 | div onClick → button/role；Modal 有 role/aria-modal/遮罩/Esc | 全部 |
+| UI 组件 | select/checkbox/scrollbar/alert 等已主题化，无浏览器原生 | 0 个原生 |
 | 设计性格 | 与 Phase 3 声明一致 | 合理 |
 | 视觉节奏 | Section 间距 ≥ 2 种值；标题下间距 < 标题上间距 | 全部 |
 | 难忘品质 | 能一句话说出页面独特之处 | 存在 |

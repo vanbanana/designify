@@ -20,6 +20,7 @@
 | **响应式** | 375px / 768px / 1440px 三断点可用 | 3/3 通过 |
 | **质量脚本** | `node scripts/quality-check.mjs <dir>` 全部通过 | 0 项违规（P0 回归） |
 | **可访问性** | div onClick 改为 button/role；Modal 有 role/aria-modal/遮罩/Esc | 0 个 div onClick，Modal 全部合规 |
+| **UI 组件一致性** | 所有交互组件已自定义样式（select/checkbox/scrollbar/alert/switch等） | 0 个浏览器原生组件 |
 
 ### 字号检查细则（必须按类型列出证据）
 
