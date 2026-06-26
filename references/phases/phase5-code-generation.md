@@ -67,7 +67,10 @@
 4. 再填内容：真实文案（不用 lorem ipsum，用符合业务的中文内容）
 5. 然后做交互：按钮状态、表单验证状态机、导航切换
    ⚠️ Step 5 强制子步骤（UI 组件完整性）：
+   ├── **读 `references/craft/components.md` → 写出"本页用到的控件清单"**
    ├── 5a. 自定义所有表单控件（select/checkbox/radio/switch/textarea）
+   │    ⚠️ 原生 `<select>` 加 Tailwind 不算自定义。必须替换为 Headless UI / 自定义 button+ul。
+   │    ⚠️ `<input type="checkbox">` 只改宽高不算自定义。必须 appearance: none + 自定义勾号。
    ├── 5b. 自定义滚动条（::-webkit-scrollbar）
    ├── 5c. 自定义 alert/toast（禁止 window.alert/confirm/prompt）
    ├── 5d. 自定义 tooltip/pagination/spinner/progress/tag
@@ -101,9 +104,20 @@
 
 **Step 7.5 —— "令人难忘的品质"验证（动效完成后）：**
 - 问自己：**"关掉这个页面后，用户能记住的一个东西是什么？"**
-- 如果不能回答 → 添加一个"一个大胆之举"（一个突出的视觉元素、一个意外布局、一个独特动效）
-- 这个品质必须与 Phase 3 Design Read 中声明的设计性格（Boldness / Motion / Density）一致
+- 如果不能回答 → 添加一个"一个大胆之举"
+- 这个品质必须与 Phase 3 Design Read 中声明的设计性格一致
 - 记录在质量报告中
+
+**Step 7.7 —— 红队自审（每个交互组件完成后）：**
+对刚写完的每个交互组件，回答三个问题：
+1. "如果用户操作系统是 Windows，这个组件看起来还像品牌色吗？"
+   → 特别是 select 下拉面板、checkbox 勾号、scrollbar 滑块
+2. "这个组件的 focus / hover / disabled / loading 都有定义吗？"
+   → 只写了 default = 没写完
+3. "如果 CSS 加载失败，组件还能用吗？"
+   → 依赖 CSS 的交互（如 checkbox::after）需要确保无样式时可访问
+  
+任意一个答不上来 → 重写该组件。
 
 **Step 6.5 —— 组件文档生成（状态预览）：**
 - 为核心组件写入 `docs/components/<name>.md`

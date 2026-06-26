@@ -68,9 +68,12 @@ Mini:   24px 高，12px 文字，8px 水平内边距  → 标签/芯片
 
 ### 卡片反模式
 
-- ❌ 所有卡片一样的大小 → 用内容决定高度
+- ❌ 功能类卡片（特性/定价/团队）不等高 → 必须等高对齐
 - ❌ 只有阴影区分卡片和背景 → 暗色模式用边框
 - ❌ 卡片内没有视觉焦点 → 每个卡片要有一个主要元素
+- ❌ 给原生 `<select>` 加 Tailwind 类就算"自定义" → 必须替换为 Headless UI Listbox / Radix Select / 自写 button+ul（浏览器渲染的下拉面板无法 CSS 控制）
+- ❌ `<input type="checkbox">` 只改宽高不改 appearance → 必须 `appearance: none` + 自定义勾号
+- ❌ 一行里放 3 个同样重要的 Primary 按钮 → 每屏 1 个 Primary
 - ❌ 卡片间距 < 卡片内边距 → 违反亲密性原则
 
 ## 表单

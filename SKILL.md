@@ -378,6 +378,17 @@ Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Ph
 **视觉节奏：** Section 间距 ≥ 2 种值；标题下间距 < 标题上间距（→ `visual-rhythm.md`）
 **强调色配给：** 主色每屏 ≤ 3 次（→ `color.md`）
 
+<HARD-GATE>
+**写之前必须读 craft 文件，按规则做。**
+
+写表单控件前 → 读 `components.md`，按"select 必须替换为 Headless UI/自定义 button+ul"做
+写卡片网格前 → 读 `components.md` 的卡片等高规则，按"所有卡片内部结构一致"做
+写动效前 → 读 `animation-discipline.md`，按缓动曲线和时长做
+写交互前 → 读 `accessibility-baseline.md`，按 Modal/Drawer 强制规则做
+
+"我以为我知道" = 没读。没读 = 写错自负。不返工。
+</HARD-GATE>
+
 ---
 
 ## Phase 5: 代码生成（任务分解模式）
@@ -424,6 +435,14 @@ Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Ph
 **目标：** 10 维量化 + **脚本扫描** + Anti-AI-Slop P0 + 最多 3 轮自审。
 **指令：** `references/phases/phase6-quality-gate.md`
 **工具：** `node scripts/quality-check.mjs <dir> --output output/quality-report.md --verbose`
+
+<HARD-GATE>
+**质量脚本必须能运行。**
+脚本失败（SyntaxError / 依赖缺失 / 超时）→ 禁止跳过质量门禁。
+必须执行手工 fallback：逐条读 `components.md` 的规则，按规则逐条检查代码。
+手工检查结论写入质量报告，每条结论必须标注"手工检查（依据: components.md 第X条）"。
+"脚本跑不起来就算了吧" = 不通过。
+</HARD-GATE>
 
 **硬性阈值：**
 
