@@ -379,7 +379,7 @@ If Haas Groot Disp and Haas Grotesk are unavailable, **Inter Display** (variable
 ### Grid & Container
 - **Max content width:** ~1280px centered, with `{spacing.xxl}` (48px) horizontal breathing room.
 - **Editorial body:** Single 8/12-column at large breakpoints, collapsing to single-column on mobile.
-- **Demo-card grids:** 3 or 4 columns at desktop, 2 at tablet, 1 at mobile. Card sizes are deliberately uneven within the grid to dodge a uniform "spec sheet" feel.
+- **Demo-card grids:** 3 or 4 columns at desktop, 2 at tablet, 1 at mobile. Card sizes are deliberately uneven within the grid to dodge a uniform "spec sheet" feel. **⚠️ 仅限作品展示/画廊场景。功能卡片必须等高。**
 - **Logo strip:** 6 monochrome partner logos in a single row at desktop; wraps to 3-up on mobile.
 
 ### Whitespace Philosophy
@@ -495,6 +495,7 @@ Product UI screenshots inside demo-card grids retain native aspect ratios (typic
 - Trust whitespace as the hero atmosphere. Hero bands are intentionally calm — no gradient, no mesh, no atmospheric backdrop. Going against this reads as off-brand.
 - Use `{component.signature-coral-card}`, `{component.signature-forest-card}`, and `{component.hero-card-dark}` to break editorial monotony. These are the brand's voltage moments.
 - Keep `{component.demo-grid-card}` heights uneven within a grid. Uniform heights feel like a spec sheet.
+  **⚠️ 仅在作品集/瀑布流/画廊场景下适用。功能类卡片（团队介绍、定价方案、功能特性）必须等高对齐。滥用不等高 = 布局错误。**
 - Treat the pricing surface as its own dialect: keep `{typography.pricing-display}`, `{typography.pricing-card-title}`, and `{component.button-pricing-pill}` together. Mixing them with Haas Grotesk button type breaks the sub-system's voice.
 - Anchor every editorial band with `{spacing.section}` (96px) vertical padding.
 

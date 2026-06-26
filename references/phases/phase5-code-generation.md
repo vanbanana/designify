@@ -110,10 +110,14 @@
 - 每个文件包含 default / loading / empty / error / edge 状态代码块
 - 格式见 `references/craft/component-documentation.md`
 
-**Step 6.6 —— 🧪 组件画廊渲染（实验性功能 — 询问用户）：**
+**Step 6.6 —— 🧪 组件状态画廊（实验性功能 — 询问用户）：**
 - 询问："是否需要将所有组件状态渲染为一个 HTML 画廊，方便快速浏览？"
-- 用户选择"是" → 运行 `node scripts/render-component-gallery.mjs <dir> --open`
-- 生成 `output/component-gallery.html`，浏览器自动打开
+- 用户选择"是" → **AI 直接生成** `output/component-gallery.html`
+  - 读取 `docs/components/*.md` 中所有 ````html preview` 代码块
+  - 收集项目 CSS 文件注入 `<style>`
+  - 按组件分组，每组内 grid 展示所有状态
+  - 每个状态卡片标注状态名称和类型（default/loading/empty/error/edge）
+  - 生成后提示用户浏览器打开
 - 用户选择"否" → 跳过
 
 **Step 7.6 —— API 契约推导（生成结束后执行）：**
