@@ -42,6 +42,10 @@
 | **设计性格（Boldness/Motion/Density 三轴）** | **`references/craft/design-character.md`** |
 | **视觉节奏（间距变化/呼吸感）** | **`references/craft/visual-rhythm.md`** |
 | **艺术性代码参考（获奖站点源码/代码模式）** | **`references/craft/creative-code-references.md`**（Boldness ≥ 6 时必加载）|
+| **任务执行与恢复** | **`references/craft/task-execution.md`** |
+| **文档管理标准** | **`references/craft/documentation-standards.md`** |
+| **组件文档与状态预览** | **`references/craft/component-documentation.md`** |
+| **API 契约与校验** | **`references/craft/api-contract-standards.md`** |
 
 ### 阶段 5：质量门禁
 | 需要做什么 | 读哪个文件 |
@@ -56,6 +60,8 @@
 | **设计性格验证** | **`references/craft/design-character.md` → 铁律 + 红旗** |
 | **视觉节奏验证** | **`references/craft/visual-rhythm.md` → 反模式** |
 | **艺术性代码引用检查** | **`references/craft/creative-code-references.md` → 代码引用纪律** |
+| **任务执行纪律** | **`references/craft/task-execution.md` → 铁律 + checkpoint** |
+| **API 契约完整性** | **`references/craft/api-contract-standards.md` → 校验规则** |
 
 ---
 

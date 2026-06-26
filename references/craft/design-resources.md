@@ -312,3 +312,71 @@ AI产品Lucide加Recraft，仪表盘Lucide不吃亏
 - [ ] SVG 有 `viewBox="0 0 24 24"` 和 `aria-hidden="true"`
 - [ ] 营销落地页的截图使用了设备框架
 - [ ] 场景路由表匹配了实际项目类型
+- [ ] Mock API 已生成（如用户选择需要）
+
+---
+
+## Mock API 服务（可选，按需生成）
+
+> 当 Phase 5 询问"是否需要 Mock API"且用户选择"需要"时加载。
+
+**用途：** 让生成的前端页面有真实感数据可展示，无需等待后端开发完成。
+
+**技术方案：** 纯 Node.js http 模块，零外部依赖，任何前端框架均可对接。
+
+### 生成规则
+
+```
+1. 扫描页面中所有数据需求（列表、表单提交、登录、搜索）
+2. 为每个 endpoint 创建 mock handler
+3. handler 返回真实感的中文业务数据（非 Lorem ipsum）
+4. 错误 handler 返回合理的错误响应（400/401/500）
+
+写入文件：
+  - mock-api.js（服务端代码，技术栈无关）
+  - docs/mock-api.md（端点文档）
+```
+
+### 模板
+
+```javascript
+// mock-api.js — 纯 Node.js，零依赖
+const http = require('http');
+
+const handlers = {
+  'GET /api/works': (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      data: [
+        { id: 1, title: '作品一', description: '...', image: 'https://placehold.co/400x300' },
+      ],
+      total: 1
+    }));
+  },
+  'POST /api/login': (req, res) => {
+    let body = '';
+    req.on('data', d => body += d);
+    req.on('end', () => {
+      const { email, password } = JSON.parse(body);
+      if (!email || !password) {
+        res.writeHead(400);
+        res.end(JSON.stringify({ error: 'missing_fields', message: '请填写邮箱和密码' }));
+        return;
+      }
+      if (password.length < 6) {
+        res.writeHead(401);
+        res.end(JSON.stringify({ error: 'weak_password', message: '密码强度不足' }));
+        return;
+      }
+      res.writeHead(200);
+      res.end(JSON.stringify({ token: 'mock-token-xxx', user: { id: 1, name: '测试用户' } }));
+    });
+  }
+};
+```
+
+### 规则
+
+- 选择"不需要"时：不生成任何 mock 文件
+- 选择"需要"时：mock-api.js + docs/mock-api.md 必须同时生成
+- mock 数据必须是真实感的中文业务数据（禁止 Lorem ipsum / John Doe）

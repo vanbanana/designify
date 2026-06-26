@@ -21,6 +21,7 @@
 | **质量脚本** | `node scripts/quality-check.mjs <dir>` 全部通过 | 0 项违规（P0 回归） |
 | **可访问性** | div onClick 改为 button/role；Modal 有 role/aria-modal/遮罩/Esc | 0 个 div onClick，Modal 全部合规 |
 | **UI 组件一致性** | 所有交互组件已自定义样式（select/checkbox/scrollbar/alert/switch等） | 0 个浏览器原生组件 |
+| **API 契约完整性** | docs/api-contract.md 存在；所有 endpoint 🟢 完整；无 🔴 缺失 | 全部 🟢 |
 
 ### 字号检查细则（必须按类型列出证据）
 
@@ -102,6 +103,17 @@ Modal/Drawer：
 - [ ] 主色每屏出现次数 ≤ 3 次
 - [ ] 有一个明确的"一个大胆之举"（颜色使用上最大胆的决策）
 - [ ] 如果大胆之举是颜色，CTA 按钮没有和它冲突
+```
+
+### API 契约验证
+
+```
+API 契约检查：
+- [ ] docs/api-contract.md 文件存在
+- [ ] 所有 endpoint 标记 🟢 完整
+- [ ] 没有 🔴 标记（有 🔴 → 必须修复后才能交付）
+- [ ] 🟡 标记有字段映射说明
+- [ ] 每个 endpoint 至少有 1 个成功和 1 个错误响应文档
 ```
 
 ---

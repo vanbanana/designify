@@ -36,6 +36,25 @@
 
 ---
 
+## 询问：Mock API 服务
+
+**进入代码生成前，询问用户：**
+
+> 是否需要生成 Mock API 服务？
+> 1. **需要** — 生成 mock-api.js（纯 Node.js 零依赖）+ docs/mock-api.md
+> 2. **不需要** （已有后端/轻量项目）
+> 3. **稍后再说**
+
+选择 1 时：
+- 扫描页面中的数据需求（列表/表单/登录/搜索）
+- 为每个 endpoint 生成对应的 mock handler
+- 写入 `mock-api.js`（技术栈无关，纯 Node.js http 模块）
+- 写入 `docs/mock-api.md`（端点清单 + 启动方式）
+
+选择 2 或 3 时：不生成 mock 文件。
+
+---
+
 ## 生成顺序（7 + 2 步）
 
 ```
@@ -85,6 +104,17 @@
 - 如果不能回答 → 添加一个"一个大胆之举"（一个突出的视觉元素、一个意外布局、一个独特动效）
 - 这个品质必须与 Phase 3 Design Read 中声明的设计性格（Boldness / Motion / Density）一致
 - 记录在质量报告中
+
+**Step 6.5 —— 组件文档生成（状态预览）：**
+- 为核心组件写入 `docs/components/<name>.md`
+- 每个文件包含 default / loading / empty / error / edge 状态代码块
+- 格式见 `references/craft/component-documentation.md`
+
+**Step 7.6 —— API 契约推导（生成结束后执行）：**
+- 扫描代码中所有 fetch / axios / $.ajax 调用
+- 提取：method, path, 请求字段, 响应处理, 错误处理
+- 写入 `docs/api-contract.md`（含 🟢/🟡/🔴 校验标记）
+- 格式见 `references/craft/api-contract-standards.md`
 
 ---
 

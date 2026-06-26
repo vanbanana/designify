@@ -8,6 +8,7 @@
  *   --output <path>     输出文件路径（默认 stdout）
  *   --verbose           显示详细日志
  *   --ext <exts>        扫描扩展名（默认 "css,jsx"）
+ *   --audit             审计模式：扫描 CSS/JS/HTML 文件，更全面检测（供 Phase 0 使用）
  * 
  * 零外部依赖：仅使用 Node.js 18+ 内置 API
  * 
@@ -17,6 +18,8 @@
  *   3. div/span onClick（非语义化交互）
  *   4. 占位内容（Lorem ipsum / John Doe 等）
  *   5. CSS 变量使用审计（硬编码色值/间距）
+ *   6. 原生 UI 组件（alert/confirm 等浏览器弹窗）
+ *   7. [audit 模式] 文件结构分析、技术栈识别
  */
 
 // ─── CLI 参数解析 ──────────────────────────────────────────────
@@ -25,8 +28,11 @@ const targetDir = args.find(a => !a.startsWith('--') && !args[args.indexOf(a) - 
 const outputFlag = args.indexOf('--output');
 const outputPath = outputFlag !== -1 ? args[outputFlag + 1] : null;
 const verbose = args.includes('--verbose');
+const auditMode = args.includes('--audit');
 const extFlag = args.indexOf('--ext');
-const scanExts = extFlag !== -1 ? args[extFlag + 1].split(',').map(s => s.trim()) : ['css', 'jsx'];
+const scanExts = auditMode 
+  ? ['css', 'jsx', 'html', 'js', 'tsx', 'ts'] 
+  : (extFlag !== -1 ? args[extFlag + 1].split(',').map(s => s.trim()) : ['css', 'jsx']);
 
 if (!targetDir) {
   console.error(`
@@ -359,6 +365,32 @@ for (const file of files) {
   log(`  扫描 ${relative(process.cwd(), file)} (${lines} 字符)`);
 }
 
+// ─── Audit 模式：技术栈识别 ─────────────────────────────────
+let auditInfo = null;
+if (auditMode) {
+  const stackHints = {
+    react: /import React|from ['"]react['"]|from ['"]react-dom['"]/i,
+    nextjs: /from ['"]next\/|export (getServerSideProps|getStaticProps)/i,
+    vue: /import Vue|from ['"]vue['"]|from ['"]nuxt['"]/i,
+    tailwind: /@tailwind|tailwindcss|className=["'][^"']* (bg-|text-|p-\d|m-\d|flex|grid)/i,
+    'css-modules': /\.module\.css/,
+    typescript: /\.tsx?$/i,
+  };
+
+  const detected = {};
+  for (const [name, re] of Object.entries(stackHints)) {
+    for (const file of files) {
+      try {
+        const content = readFileSync(file, 'utf-8');
+        if (re.test(content) || re.test(file)) {
+          detected[name] = true;
+        }
+      } catch {}
+    }
+  }
+  auditInfo = { totalFiles: files.length, fileTypes: { ...fileStats }, detectedStack: Object.keys(detected) };
+}
+
 // ─── 分类统计 ──────────────────────────────────────────────────
 const byType = {};
 for (const v of allViolations) {
@@ -380,7 +412,17 @@ function generateReport() {
 
 > 自动生成：${now}
 > 扫描目录：\`${targetDir}\`
-> 扫描文件：${fileStats.css} CSS + ${fileStats.jsx} JSX = ${totalFiles} 个
+> 扫描文件：${fileStats.css || 0} CSS + ${fileStats.jsx || 0} JSX + ${fileStats.html || 0} HTML` 
+    + (auditMode ? `\n> 模式：审计（--audit）` : ``) 
+    + ` = ${totalFiles} 个`;
+
+  // Audit 模式下输出技术栈识别
+  if (auditInfo && auditInfo.detectedStack.length > 0) {
+    report += `\n\n## 技术栈识别\n\n| 技术 | 检测结果 |\n|------|----------|\n`;
+    for (const tech of ['react', 'nextjs', 'vue', 'tailwind', 'css-modules', 'typescript']) {
+      report += `| ${tech} | ${auditInfo.detectedStack.includes(tech) ? '✅' : '❌' } |\n`;
+    }
+  }
 
 ---
 

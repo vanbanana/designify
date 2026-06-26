@@ -47,6 +47,14 @@ version: "3.0.0"
 **所有这些想法都意味着：你在合理化。停止。执行规则。**
 </RED-FLAGS>
 
+<RECOVERY-GUIDE>
+**如果在执行过程中遭遇上下文压缩：**
+1. 读 `output/progress.md` 找到 Checkpoint
+2. 从最后一个 ✅ 的下一个 ⏳/⬜ 任务继续
+3. 重建上下文：读 `output/YY-MM-DD-design-read.md` + `docs/README.md`
+4. **不要问用户"从哪里开始"**——自己在文件中找到。
+</RECOVERY-GUIDE>
+
 ## 证据先于声明（Evidence Before Claims）
 
 ```
@@ -112,9 +120,9 @@ node scripts/quality-check.mjs <target-dir> --output output/quality-report.md --
 > "Phase 3：Design Read。铁律 1 执行点。"
 
 ```
-Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
-→ Phase 4: 设计方向 → Phase 5: 代码生成 → Phase 6: 质量门禁 + Critique
-→ Phase 7: 交付迭代
+Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
+→ Phase 4: 设计方向 → Phase 5: 代码生成（任务分解+子任务验证）→ Phase 6: 质量门禁 + Critique
+→ Phase 7: 交付 → Phase 8: 文档生成与收尾
 ```
 
 **跳过任一阶段 = 后续产出低质量。**
@@ -160,6 +168,22 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 **用户覆盖：** 现有项目优先用用户目录。`output/` 是默认值，非强制。
 
 **恢复：** 对话记忆压缩后不存活。`output/progress.md` 是恢复地图——信任文件系统中的记录，而非上下文记忆。
+
+---
+
+## Phase 0: 项目审计（可选入口）
+
+**触发条件：** 
+- 用户说"帮我看看这个页面"、"优化一下"、"分析一下"、"重构"
+- 检测到用户提供了现有文件或项目路径
+
+**流程：**
+1. 扫描项目目录 → 识别技术栈（React/Vue/HTML/Tailwind/CSS Modules）
+2. 运行 `node scripts/quality-check.mjs <dir> --audit` → 列出问题清单
+3. 运行视觉审计：Typography / Color / Layout / Interactivity / Content / Components / Icons / Code Quality
+4. 输出审计报告到 `output/YYYY-MM-DD-audit-report.md`
+5. 询问用户：要修复哪些问题？
+6. 基于选择 → 进入 Phase 1（或直接修复）
 
 ---
 
@@ -332,26 +356,37 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 
 ---
 
-## Phase 5: 代码生成
+## Phase 5: 代码生成（任务分解模式）
 
-**目标：** 按 7 步顺序生成语义化、五态完整、动效规范的页面代码。代码写入项目根目录（非 output/）。
-**详细指令：** `references/phases/phase5-code-generation.md`
+**目标：** 按任务分解 → 逐个生成 → 逐个验证。
+**指令：** `references/phases/phase5-code-generation.md`
+**任务纪律：** `references/craft/task-execution.md`
 
-**必须按顺序执行（铁律 5 执行点）：**
+**入口操作：**
+1. 将 Phase 2 页面清单拆为 TodoWrite 子任务（每个页面一个）
+2. **询问：** "是否需要生成 Mock API 服务？"（1-需要/2-不需要/3-稍后）
+3. 按顺序逐个执行子任务
+
+**每个子任务（每个页面）执行步骤：**
 1. 骨架：语义化页面结构（header/main/nav/section/article/footer）
 2. 令牌：CSS 变量定义 → 写入 `output/design-tokens.css`
-3. 素材：图标库 CDN/npm + 占位图 + 插画（**图标预检**见 phase5-code-generation.md）
+3. 素材：图标库 CDN/npm + 占位图 + 插画
 4. 内容：真实文案（**禁止 lorem ipsum**）
-5. 交互 + **UI 组件完整化**：按钮状态、表单验证状态机、导航切换 + 自定义 select/checkbox/scrollbar/alert（详见 step5 子步骤）
+5. 交互 + **UI 组件完整化**：按钮状态 + 自定义 select/checkbox/scrollbar/alert
 6. 状态：空状态/加载骨架屏/错误状态/边界处理
 7. 动效：缓动曲线 + 时长阈值 + prefers-reduced-motion
-8. **UI 完整性扫尾**：检查所有交互组件已主题化，无浏览器原生样式
-9. **布局对齐校验**：flex 居中、同行元素等高、列表间距统一
+8. **UI 完整性扫尾**：检查所有交互组件已主题化
+9. **布局对齐校验**：flex 居中、同行等高、间距统一
 
-**生成过程中必须的设计感检查（详见 phase5-code-generation.md）：**
-- Step 4.5：强调色配给检查 — 主色每屏 ≤ 3 次
-- Step 5.5：视觉节奏检查 — Section 间距至少 2 种不同值
-- Step 7.5："令人难忘的品质"验证 — 用户关掉页面后能记住什么？
+**每完成一个子任务（必须执行）：**
+```
+1. ✅ 运行 quality-check.mjs（0 违规才能继续）
+2. ✅ 更新 progress.md（结构化 checkpoint）
+3. ✅ 标记 TodoWrite completed
+4. → 下一个子任务
+```
+
+**进入 Phase 6 条件：** 所有子任务 ✅ 完成
 
 ---
 
@@ -385,6 +420,7 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 | 质量脚本 | `scripts/quality-check.mjs` 零违规 | 0 违规 |
 | 可访问性 | div onClick → button/role；Modal 有 role/aria-modal/遮罩/Esc | 全部 |
 | UI 组件 | select/checkbox/scrollbar/alert 等已主题化，无浏览器原生 | 0 个原生 |
+| API 契约 | docs/api-contract.md 存在；全部 🟢 无 🔴 | 完整 |
 | 设计性格 | 与 Phase 3 声明一致 | 合理 |
 | 视觉节奏 | Section 间距 ≥ 2 种值；标题下间距 < 标题上间距 | 全部 |
 | 难忘品质 | 能一句话说出页面独特之处 | 存在 |
@@ -415,16 +451,36 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 
 ---
 
-## Phase 7: 交付与迭代
+## Phase 7: 交付
 
 完成后：
 1. 展示量化检查结果—**铁律 6 要求的证据**
 2. 列出已实现的页面和功能
 3. 说明设计决策的心理学依据
-4. 询问："哪个部分想调整？或继续做下一个页面？"
-5. 用户满意 → 提供代码文件和技术说明
+4. 询问："哪个部分想调整？"
 
-**进度持久化：** 对话记忆不存活。`output/progress.md` 记录进度——完成的页面、通过的检查、已知问题。这是恢复地图。
+---
+
+## Phase 8: 文档生成与项目收尾
+
+**必须执行（按顺序）：**
+1. **API 契约推导** → 扫描所有 fetch/axios → 写入 `docs/api-contract.md`（含 🟢/🟡/🔴 校验）
+2. **组件文档生成** → 每个核心组件写入 `docs/components/*.md`（含状态预览代码块）
+3. **Mock API**（如 Phase 5 选择"需要"）→ 写入 `mock-api.js` + `docs/mock-api.md`
+4. **CHANGELOG 更新** → 追加到 `docs/CHANGELOG.md`（`## YYYY-MM-DD`）
+5. **docs/README.md 生成** → 文档总索引
+6. **progress.md 更新** → 标记 Phase 8 完成
+7. **展示收尾摘要**：
+   - 生成文件清单
+   - API 契约完整性（🟢/🟡/🔴）
+   - 组件文档覆盖率（N/M）
+   - 质量门禁结果
+
+**指令：** `references/craft/documentation-standards.md`（文档体系）
+**指令：** `references/craft/api-contract-standards.md`（API 契约）
+**指令：** `references/craft/component-documentation.md`（组件文档）
+
+**进度持久化：** 对话记忆不存活。`output/progress.md` 是唯一恢复地图。
 
 ---
 
@@ -466,7 +522,7 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 
 ---
 
-## Craft 通用工艺（17 个维度，按需加载）
+## Craft 通用工艺（21 个维度，按需加载）
 
 生成代码时根据页面类型加载所需的 craft 文件：
 
@@ -490,6 +546,10 @@ Phase 1: 需求发现 → Phase 2: 产品定义 → Phase 3: Design Read
 | **`references/craft/design-character.md`** | **设计性格系统 — Boldness/Motion/Density 三轴 + 令人难忘的品质** | **Phase 3 Design Read + Phase 4 强制** |
 | **`references/craft/visual-rhythm.md`** | **视觉节奏 — 间距变化哲学 + 节奏模式 + 不对称布局** | **Phase 4 布局决策 + Phase 5 代码生成** |
 | **`references/craft/creative-code-references.md`** | **艺术性前端代码资源 — 可直接学习的获奖站点源码 + 6 种艺术风格代码模式** | **Boldness ≥ 6 或 创意/游戏/品牌官网项目** |
+| **`references/craft/task-execution.md` (NEW)** | **任务分解 + checkpoint + 上下文恢复** | **Phase 5 多页面项目** |
+| **`references/craft/documentation-standards.md` (NEW)** | **docs/ 目录体系 + 文档生命周期 + ADR** | **Phase 8 文档生成** |
+| **`references/craft/component-documentation.md` (NEW)** | **组件状态预览标准 + Markdown 内嵌代码块** | **Phase 5 Step 6.5 + Phase 8** |
+| **`references/craft/api-contract-standards.md` (NEW)** | **API 契约格式 + 双重校验 + 字段映射** | **Phase 5 Step 7.6 + Phase 6** |
 
 ---
 
