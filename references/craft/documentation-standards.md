@@ -93,26 +93,44 @@ components/*.md: 文件头 updated: YYYY-MM-DD
 ```markdown
 # [项目名] 文档
 
+> **项目状态：** active development
+> **最新版本：** v1.0.0
+> **最后更新：** 2026-06-26
+
 ## 快速开始
+
 [2-3 行项目简介]
 
 ## 文档索引
 
-| 文件 | 内容 | 谁需要读 |
-|------|------|----------|
-| api-contract.md | API 接口定义和字段映射 | 前端/后端开发者 |
-| CHANGELOG.md | 变更历史 | 所有人 |
-| components/ | 组件文档（含状态预览） | UI 开发者 |
-| architecture/OVERVIEW.md | 项目架构概览 | 新加入开发者 |
-| architecture/decisions/ | 架构决策记录 | 所有开发者 |
-| deployment.md | 部署指南 | 运维 |
-| design-tokens.md | 设计令牌参考 | 前端开发者 |
-| mock-api.md | Mock API 使用方式 | 前端开发者 |
+| 文档 | 说明 |
+|------|------|
+| [API Contract](./api-contract.md) | 后端接口定义与字段映射 |
+| [Components](./components/) | 组件文档与状态预览 |
+| [Architecture](./architecture/OVERVIEW.md) | 项目架构与决策记录 |
+| [Design Tokens](./design-tokens.md) | CSS 变量与设计令牌 |
+| [Deployment](./deployment.md) | 部署指南与环境配置 |
+| [Mock API](./mock-api.md) | Mock 服务使用方式 |
+| [Changelog](./CHANGELOG.md) | 变更历史 |
 
 ## 技术栈
-- 框架：[React/Next.js/Vue/单文件 HTML]
-- 样式：[Tailwind/CSS Modules/styled-components]
-- 构建：[Vite/无]
+
+- **框架：** [React/Next.js/Vue/单文件 HTML]
+- **样式：** [Tailwind/CSS Modules/styled-components]
+- **构建：** [Vite/Webpack/无]
+- **包管理：** [npm/pnpm/yarn]
+
+## 组件索引（components/README.md）
+
+```
+# Components
+
+| 组件 | 状态 | 状态覆盖 | 文档 |
+|------|------|----------|------|
+| Button | ready | default, loading, disabled, hover, edge | [文档](./button.md) |
+| Card | ready | default, loading, empty, error, edge | [文档](./card.md) |
+| Header | beta | default | [文档](./header.md) |
+```
 ```
 
 ---

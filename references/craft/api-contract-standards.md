@@ -17,32 +17,57 @@ AI 生成前端代码时会假设 API 格式，但：
 
 ---
 
-## 契约格式
+## 契约格式（参考 OpenAPI 3.1 规范）
 
 每次 Phase 5 代码生成后，必须生成 `docs/api-contract.md`：
 
 ```markdown
+---
+title: API Contract
+version: 1.0.0
+updated: 2026-06-26
+review: draft                    # draft | reviewed | approved
+---
+
 # API Contract v1.0.0
-> updated: 2026-06-26
-> 项目: [项目名]
-> 技术栈: [React/Next.js/Vue/单文件 HTML]
 
-## 总览
+> **项目：** [项目名]
+> **技术栈：** [React/Next.js/Vue/单文件 HTML]
+> **基准 URL：** `http://localhost:3001/api`（开发）| `/api`（生产）
 
-| 端点 | 方法 | 用途 | 校验状态 |
-|------|------|------|----------|
-| /api/login | POST | 用户登录 | 🟢 完整 |
-| /api/works | GET | 获取作品列表 | 🟢 完整 |
-| /api/works/:id | GET | 获取作品详情 | 🟡 有歧义 |
-| /api/contact | POST | 提交联系方式 | 🔴 缺失错误处理 |
+---
+
+## 认证（Security）
+
+| 方案 | 位置 | 格式 |
+|------|------|------|
+| Bearer Token | Header: `Authorization: Bearer <token>` | JWT |
+| （可选）API Key | Header: `X-API-Key: <key>` | UUID |
+
+---
+
+## 端点总览
+
+| 方法 | 路径 | 用途 | 认证 | 审核 |
+|------|------|------|------|------|
+| POST | `/api/login` | 用户登录 | 无 | approved |
+| GET | `/api/works` | 获取作品列表 | Bearer | approved |
+| GET | `/api/works/:id` | 获取作品详情 | Bearer | draft |
+| POST | `/api/contact` | 提交联系方式 | 无 | changes-requested |
 
 ---
 
 ### POST /api/login
-- **描述：** 用户邮箱密码登录
-- **Auth：** 无
 
-**请求体：**
+登录并获取访问令牌。
+
+**请求**
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| email | string | ✅ | 用户邮箱 |
+| password | string | ✅ | 密码（≥ 6 位） |
+
 ```json
 {
   "email": "user@example.com",
@@ -50,52 +75,87 @@ AI 生成前端代码时会假设 API 格式，但：
 }
 ```
 
-**响应 200 — 登录成功：**
-```json
+**响应**
+
+| 状态码 | 说明 | 前端处理 |
+|--------|------|----------|
+| `200` | 登录成功 | 存储 token，跳转首页 |
+| `400` | 请求参数缺失 | 显示"请填写邮箱和密码" |
+| `401` | 认证失败 | 显示"邮箱或密码错误" |
+| `429` | 请求过于频繁 | 显示"请稍后再试" |
+| `5xx` | 服务器错误 | 显示"服务器繁忙，请稍后重试" |
+
+```json title="200"
 {
   "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": { "id": 1, "name": "张三", "avatar": "..." }
+  "user": { "id": 1, "name": "张三", "email": "user@example.com" }
 }
 ```
 
-**响应 401 — 认证失败：**
-```json
+```json title="400"
+{
+  "error": "missing_fields",
+  "message": "请填写邮箱和密码"
+}
+```
+
+```json title="401"
 {
   "error": "invalid_credentials",
   "message": "邮箱或密码错误"
 }
 ```
 
-**前端处理：** 显示 "邮箱或密码错误" 提示
-
 ---
 
 ### GET /api/works
-- **描述：** 获取作品列表
-- **Auth：** 需要 Token（header: Authorization: Bearer xxx）
 
-**查询参数：**
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| page | number | 否 | 页码，默认 1 |
-| limit | number | 否 | 每页数量，默认 10 |
+获取作品列表（分页）。
 
-**响应 200：**
-```json
+**查询参数**
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| page | number | ❌ | 1 | 页码 |
+| limit | number | ❌ | 10 | 每页条数 |
+
+**响应**
+
+| 状态码 | 说明 |
+|--------|------|
+| `200` | 返回作品列表 |
+| `401` | Token 无效或过期 |
+
+```json title="200"
 {
   "data": [
-    { "id": 1, "title": "作品一", "image": "https://...", "created_at": "2026-06-01" }
+    {
+      "id": 1,
+      "title": "作品一",
+      "image": "https://...",
+      "created_at": "2026-06-01"
+    }
   ],
   "total": 24,
-  "page": 1
+  "page": 1,
+  "limit": 10
 }
 ```
 
-**前端字段映射：**
+```json title="401"
+{
+  "error": "token_expired",
+  "message": "登录已过期，请重新登录"
+}
 ```
-请求字段: page → 响应字段: page ✅ 一致
-请求字段: limit → 响应字段: ✅ limit 存在（但在前端变量中叫 pageSize）
-🟡 注意: 前端变量名 pageSize 和后端字段名 limit 需要统一
+
+**前端字段映射**
+
+```
+请求 page     → 响应 page        ✅ 一致
+请求 limit    → 响应 limit        ✅ 一致（前端变量名 pageSize，需统一）
+响应 data     → 前端 props.data   ✅
+响应 total    → 前端分页组件      ✅
 ```
 
 ---
@@ -127,9 +187,9 @@ AI 生成前端代码时会假设 API 格式，但：
 扫描代码中所有 API 调用，对每个 endpoint 检查：
 
 ```
-✅ 🟢 完整 = 有请求体 + 有成功响应处理 + 有错误处理
-⚠️ 🟡 有歧义 = 字段名不一致（前后端命名不统一）
-❌ 🔴 缺失 = 缺少错误处理 或 缺少响应处理
+✅ approved = 有请求体 + 有成功响应处理 + 有错误处理
+⚠️ draft = 字段名不一致（前后端命名不统一）或缺少部分文档
+❌ changes-requested = 缺少错误处理 或 缺少响应处理
 ```
 
 ### 第二重：Phase 6 质量门禁校验
@@ -137,22 +197,22 @@ AI 生成前端代码时会假设 API 格式，但：
 ```
 API 契约检查清单：
 - [ ] docs/api-contract.md 文件存在
-- [ ] 所有 endpoint 标记 🟢 完整
-- [ ] 没有 🔴 标记（有 🔴 必须修复后才能交付）
-- [ ] 🟡 标记有说明（字段映射关系中明确标注）
+- [ ] 所有 endpoint 标记 approved
+- [ ] 没有 changes-requested（有则必须修复后才能交付）
+- [ ] draft 标记有说明（字段映射关系中明确标注）
 - [ ] 每个 endpoint 至少有 1 个成功响应和 1 个错误响应文档
 ```
 
 ### 修复规则
 
 ```
-遇到 🔴 缺失错误处理 → 在代码中添加 catch/finally 分支
+遇到 changes-requested → 在代码中添加 catch/finally 分支
   例: fetch('/api/login').then(...).catch(err => showError(err))
 
-遇到 🟡 字段名歧义 → 在契约中标注映射关系
+遇到 draft → 在契约中标注映射关系
   例: "前端发 email，后端返回 user_email → 映射关系已在契约中标注"
 
-遇到 🔴 类型不匹配 → 修复前端的字段类型
+遇到 changes-requested（类型不匹配）→ 修复前端的字段类型
   例: 发 { age: "25" } → 改成 { age: 25 }
 ```
 

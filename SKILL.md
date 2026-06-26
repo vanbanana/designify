@@ -444,7 +444,7 @@ Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Ph
 | 质量脚本 | `scripts/quality-check.mjs` 零违规 | 0 违规 |
 | 可访问性 | div onClick → button/role；Modal 有 role/aria-modal/遮罩/Esc | 全部 |
 | UI 组件 | select/checkbox/scrollbar/alert 等已主题化，无浏览器原生 | 0 个原生 |
-| API 契约 | docs/api-contract.md 存在；全部 🟢 无 🔴 | 完整 |
+| API 契约 | docs/api-contract.md 存在；全部 approved 无 changes-requested | 完整 |
 | 设计性格 | 与 Phase 3 声明一致 | 合理 |
 | 视觉节奏 | Section 间距 ≥ 2 种值；标题下间距 < 标题上间距 | 全部 |
 | 难忘品质 | 能一句话说出页面独特之处 | 存在 |
@@ -496,7 +496,7 @@ Phase 0: 项目审计 → Phase 1: 需求发现 → Phase 2: 产品定义 → Ph
 6. **progress.md 更新** → 标记 Phase 8 完成
 7. **展示收尾摘要**：
    - 生成文件清单
-   - API 契约完整性（🟢/🟡/🔴）
+   - API 契约审核状态（approved / draft / changes-requested）
    - 组件文档覆盖率（N/M）
    - 质量门禁结果
 

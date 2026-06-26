@@ -110,9 +110,9 @@ Modal/Drawer：
 ```
 API 契约检查：
 - [ ] docs/api-contract.md 文件存在
-- [ ] 所有 endpoint 标记 🟢 完整
-- [ ] 没有 🔴 标记（有 🔴 → 必须修复后才能交付）
-- [ ] 🟡 标记有字段映射说明
+- [ ] 所有 endpoint 标记 approved
+- [ ] 没有 changes-requested（有则必须修复后才能交付）
+- [ ] draft 标记有字段映射说明
 - [ ] 每个 endpoint 至少有 1 个成功和 1 个错误响应文档
 ```
 
